@@ -65,7 +65,6 @@ const NewStationForm = () => {
     
     const stationData = {
       StationName: formData.name,
-      CurrentStock: 0,
       Longitude: formData.longitude,
       Latitude: formData.latitude,
       Capacity: formData.capacity,

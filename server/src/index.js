@@ -41,7 +41,18 @@ app.get("/api/test", (req, res) => {
 });
 
 app.get("/api/stations", (req, res) => {
-  const query = "SELECT * FROM Stations";
+
+  const query = `
+    SELECT 
+      s.StationID,
+      s.StationName,
+      s.Longitude,
+      s.Latitude,
+      s.Capacity,
+    COUNT(u.UmbrellaID) AS CurrentStock
+    FROM Stations s
+    LEFT JOIN Umbrellas u ON s.StationID = u.CurrentStationID
+    GROUP BY s.StationID, s.StationName, s.Longitude, s.Latitude, s.Capacity; `;
 
   db.query(query, (err, results) => {
     if (err) {
@@ -222,6 +233,7 @@ app.get("/api/maintenance-histories", (req, res) => {
     FROM MaintenanceHistories mh
     JOIN Maintainers m ON mh.MaintainerID = m.MaintainerID
     JOIN Stations s ON mh.StationID = s.StationID
+    ORDER BY mh.MaintenanceHistoryID
   `;
 
   db.query(query, (err, results) => {
@@ -231,7 +243,6 @@ app.get("/api/maintenance-histories", (req, res) => {
         .status(500)
         .json({ error: "Failed to fetch maintenance histories" });
     }
-    console.log("Raw Results:", results);
     res.json(results);
   });
 });
@@ -319,10 +330,10 @@ app.get("/api/rental-histories/:id", (req, res) => {
 });
 
 app.post("/api/stations", (req, res) => {
-  const { StationName, CurrentStock, Longitude, Latitude, Capacity } = req.body;
+  const { StationName, Longitude, Latitude, Capacity } = req.body;
 
-  const query = `INSERT INTO stations (StationName, CurrentStock, Longitude, Latitude, Capacity) VALUES (?, ?, ?, ?, ?)`;
-  const values = [StationName, CurrentStock, Longitude, Latitude, Capacity];
+  const query = `INSERT INTO stations (StationName, Longitude, Latitude, Capacity) VALUES (?, ?, ?, ?)`;
+  const values = [StationName, Longitude, Latitude, Capacity];
 
   db.query(query, values, (error, results) => {
     if (error) {
@@ -462,12 +473,10 @@ app.post("/api/maintainers", (req, res) => {
     }
 
     console.log("Maintainer created with ID:", results.insertId);
-    res
-      .status(201)
-      .json({
-        message: "New maintainer added",
-        maintainerId: results.insertId,
-      });
+    res.status(201).json({
+      message: "New maintainer added",
+      maintainerId: results.insertId,
+    });
   });
 });
 
@@ -487,15 +496,13 @@ app.post("/api/maintenance-histories", (req, res) => {
           .json({ message: "Failed to insert new maintenance history" });
       }
 
-      res
-        .status(201)
-        .json({
-          id: result.insertId,
-          MaintenanceTime,
-          MaintainerID,
-          StationID,
-          Report,
-        });
+      res.status(201).json({
+        id: result.insertId,
+        MaintenanceTime,
+        MaintainerID,
+        StationID,
+        Report,
+      });
     }
   );
 });
@@ -713,10 +720,17 @@ app.put("/api/maintenance-histories/:historyid", (req, res) => {
 
 app.put("/api/rental-histories/:rentalId", (req, res) => {
   const { rentalId } = req.params;
-  const { AccountID, UmbrellaID, StartStationID, DestinationStationID, StartRentalTime, EndRentalTime } = req.body;
+  const {
+    AccountID,
+    UmbrellaID,
+    StartStationID,
+    DestinationStationID,
+    StartRentalTime,
+    EndRentalTime,
+  } = req.body;
 
   const formatToMySQLDateTime = (isoDate) => {
-    return new Date(isoDate).toISOString().slice(0, 19).replace('T', ' ');
+    return new Date(isoDate).toISOString().slice(0, 19).replace("T", " ");
   };
 
   const formattedStartRentalTime = formatToMySQLDateTime(StartRentalTime);
@@ -735,16 +749,23 @@ app.put("/api/rental-histories/:rentalId", (req, res) => {
 
   db.query(
     sql,
-    [AccountID, UmbrellaID, StartStationID, DestinationStationID, formattedStartRentalTime, formattedEndRentalTime, rentalId],
+    [
+      AccountID,
+      UmbrellaID,
+      StartStationID,
+      DestinationStationID,
+      formattedStartRentalTime,
+      formattedEndRentalTime,
+      rentalId,
+    ],
     (err, result) => {
       if (err) return res.status(500).send(err);
-      if (result.affectedRows === 0) 
+      if (result.affectedRows === 0)
         return res.status(404).send("Rental history not found");
       res.json({ RentalHistoryID: rentalId, ...req.body });
     }
   );
 });
-
 
 app.delete("/api/stations/:stationId", (req, res) => {
   const { stationId } = req.params;

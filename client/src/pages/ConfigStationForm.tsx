@@ -67,7 +67,6 @@ const ConfigStationForm = () => {
           Latitude: 18.795,
           Longitude: 98.952,
           Capacity: 100,
-          CurrentStock: 100
         };
 
         setFormData({

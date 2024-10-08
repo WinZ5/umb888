@@ -34,7 +34,6 @@ CREATE TABLE Accounts (
 CREATE TABLE Stations (
     StationID INT PRIMARY KEY AUTO_INCREMENT,
     StationName VARCHAR(255),
-    CurrentStock INT,
     Longitude DECIMAL(9,6),
     Latitude DECIMAL(9,6),
     Capacity INT
@@ -93,14 +92,14 @@ CREATE TABLE MaintenanceHistories (
 );
 
 -- Insert data into Stations
-INSERT INTO Stations (StationName, CurrentStock, Longitude, Latitude, Capacity) VALUES
-('Station A', 5, 98.950880, 18.799331, 8),
-('Station B', 3, 98.951569, 18.799590, 9),
-('Station C', 7, 98.951859, 18.801241, 7),
-('Station D', 9, 98.950415, 18.800453, 10),
-('Station E', 8, 98.952605, 18.801105, 12),
-('Station F', 11, 98.950922, 18.806024, 13),
-('Station G', 9, 98.950873, 18.803578, 11);
+INSERT INTO Stations (StationName, Longitude, Latitude, Capacity) VALUES
+('Station A', 98.950880, 18.799331, 8),
+('Station B', 98.951569, 18.799590, 9),
+('Station C', 98.951859, 18.801241, 7),
+('Station D', 98.950415, 18.800453, 10),
+('Station E', 98.952605, 18.801105, 12),
+('Station F', 98.950922, 18.806024, 13),
+('Station G', 98.950873, 18.803578, 11);
 
 -- Insert data into PaymentMethods
 INSERT INTO PaymentMethods (CardNumber, CardName, CVV, ExpireDate) VALUES
