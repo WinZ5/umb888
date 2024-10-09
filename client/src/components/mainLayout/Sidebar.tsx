@@ -27,7 +27,7 @@ const TooltipNavLink = ({ to, icon: Icon, label }: TooltipNavLinkProps) => {
 }
 
 const sidebarItems = [
-  { to: '/', icon: Home, label: 'Dashboard' },
+  { to: '/home', icon: Home, label: 'Dashboard' },
   { to: '/station', icon: Fuel, label: 'Station' },
   { to: '/umbrella', icon: Umbrella, label: 'Umbrella' },
   { to: '/account', icon: User, label: 'Account' },

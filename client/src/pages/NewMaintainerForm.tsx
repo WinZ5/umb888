@@ -54,7 +54,7 @@ const NewMaintainerForm = () => {
 
     const dataToSubmit = {
       ...formData,
-      Salary: parseFloat(formData.Salary as any) || null,
+      Salary: parseFloat(formData.Salary as unknown) || null,
     };
 
     console.log('Form submitted with the following data:', dataToSubmit);
