@@ -513,7 +513,6 @@ app.post("/api/rental-histories", (req, res) => {
     AccountID,
     DestinationStationID,
     StartStationID,
-    CardID,
     UmbrellaID,
     StartRentalTime,
     EndRentalTime,
@@ -522,8 +521,8 @@ app.post("/api/rental-histories", (req, res) => {
 
   const query = `
     INSERT INTO RentalHistories 
-    (AccountID, DestinationStationID, StartStationID, CardID, UmbrellaID, StartRentalTime, EndRentalTime, Price) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    (AccountID, DestinationStationID, StartStationID, UmbrellaID, StartRentalTime, EndRentalTime, Price) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
   const updateLocation = `
@@ -541,7 +540,6 @@ app.post("/api/rental-histories", (req, res) => {
         AccountID,
         DestinationStationID,
         StartStationID,
-        CardID,
         UmbrellaID,
         StartRentalTime,
         EndRentalTime,
