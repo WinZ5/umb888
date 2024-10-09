@@ -526,28 +526,18 @@ app.post("/api/rental-histories", (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
-  db.query(
-    query,
-    [
-      AccountID,
-      DestinationStationID,
-      StartStationID,
-      CardID,
-      UmbrellaID,
-      StartRentalTime,
-      EndRentalTime,
-      Price,
-    ],
-    (err, result) => {
-      if (err) {
-        console.error("Error inserting rental history data:", err);
-        return res
-          .status(500)
-          .json({ message: "Failed to insert new rental history" });
-      }
+  const updateLocation = `
+    UPDATE Umbrellas
+    SET
+      CurrentStationID = ?
+    WHERE UmbrellaID = ?`;
 
-      res.status(201).json({
-        id: result.insertId,
+  db.beginTransaction((err) => {
+    if (err) return res.status(500).send(err);
+
+    db.query(
+      query,
+      [
         AccountID,
         DestinationStationID,
         StartStationID,
@@ -556,9 +546,37 @@ app.post("/api/rental-histories", (req, res) => {
         StartRentalTime,
         EndRentalTime,
         Price,
-      });
-    }
-  );
+      ],
+      (err, result) => {
+        if (err) {
+          return db.rollback(() => {
+            return res.status(500).send(err);
+          });
+        }
+
+        db.query(
+          updateLocation,
+          [DestinationStationID, UmbrellaID],
+          (err, result) => {
+            if (err) {
+              return db.rollback(() => {
+                return res.status(500).send(err);
+              });
+            }
+
+            db.commit((err) => {
+              if (err) {
+                return db.rollback(() => {
+                  return res.status(500).send(err);
+                })
+              }
+              res.json({ RentalHistoryID: result.insertId, ...req.body });
+            })
+          }
+        );
+      }
+    );
+  });
 });
 
 app.put("/api/stations/:stationId", (req, res) => {
@@ -662,8 +680,17 @@ app.put("/api/umbrellas/:id", (req, res) => {
 
 app.put("/api/maintainers/:maintainerId", (req, res) => {
   const { maintainerId } = req.params;
-  const { FirstName, LastName, Email, Phone, Street, City, Province, ZIPCode, Salary } =
-    req.body;
+  const {
+    FirstName,
+    LastName,
+    Email,
+    Phone,
+    Street,
+    City,
+    Province,
+    ZIPCode,
+    Salary,
+  } = req.body;
 
   const query = `
     UPDATE Maintainers 
@@ -753,7 +780,7 @@ app.put("/api/rental-histories/:rentalId", (req, res) => {
   const formattedStartRentalTime = formatToMySQLDateTime(StartRentalTime);
   const formattedEndRentalTime = formatToMySQLDateTime(EndRentalTime);
 
-  const sql = `
+  const updateHistory = `
     UPDATE RentalHistories 
     SET 
       AccountID = ?, 
@@ -765,25 +792,62 @@ app.put("/api/rental-histories/:rentalId", (req, res) => {
       Price = ?
     WHERE RentalHistoryID = ?`;
 
-  db.query(
-    sql,
-    [
-      AccountID,
-      UmbrellaID,
-      StartStationID,
-      DestinationStationID,
-      formattedStartRentalTime,
-      formattedEndRentalTime,
-      Price,
-      rentalId,
-    ],
-    (err, result) => {
-      if (err) return res.status(500).send(err);
-      if (result.affectedRows === 0)
-        return res.status(404).send("Rental history not found");
-      res.json({ RentalHistoryID: rentalId, ...req.body });
-    }
-  );
+  const updateLocation = `
+    UPDATE Umbrellas
+    SET
+      CurrentStationID = ?
+    WHERE UmbrellaID = ?`;
+
+  db.beginTransaction((err) => {
+    if (err) return res.status(500).send(err);
+
+    db.query(
+      updateHistory,
+      [
+        AccountID,
+        UmbrellaID,
+        StartStationID,
+        DestinationStationID,
+        formattedStartRentalTime,
+        formattedEndRentalTime,
+        Price,
+        rentalId,
+      ],
+      (err, result) => {
+        if (err) {
+          return db.rollback(() => {
+            return res.status(500).send(err);
+          });
+        }
+        if (result.affectedRows === 0) {
+          return db.rollback(() => {
+            return res.status(404).send("Rental history not found");
+          });
+        }
+
+        db.query(
+          updateLocation,
+          [DestinationStationID, UmbrellaID],
+          (err, result) => {
+            if (err) {
+              return db.rollback(() => {
+                return res.status(500).send(err);
+              });
+            }
+
+            db.commit((err) => {
+              if (err) {
+                return db.rollback(() => {
+                  return res.status(500).send(err);
+                });
+              }
+              res.json({ RentalHistoryID: rentalId, ...req.body });
+            });
+          }
+        );
+      }
+    );
+  });
 });
 
 app.delete("/api/stations/:stationId", (req, res) => {
