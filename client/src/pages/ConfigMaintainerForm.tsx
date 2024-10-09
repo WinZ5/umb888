@@ -20,6 +20,7 @@ const ConfigMaintainerForm = () => {
     City: '',
     Province: '',
     ZIPCode: '',
+    Salary: null,
   });
 
   useEffect(() => {
@@ -59,6 +60,7 @@ const ConfigMaintainerForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(formData.Salary)
 
     try {
       setIsLoading(true);
@@ -125,6 +127,7 @@ const ConfigMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter First Name'
             />
           </div>
           <div>
@@ -139,6 +142,7 @@ const ConfigMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter Last Name'
             />
           </div>
           <div>
@@ -153,6 +157,7 @@ const ConfigMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter Email'
             />
           </div>
           <div>
@@ -180,6 +185,7 @@ const ConfigMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter Phone number'
             />
           </div>
           <div>
@@ -194,6 +200,7 @@ const ConfigMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter Street'
             />
           </div>
           <div>
@@ -208,6 +215,7 @@ const ConfigMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter City'
             />
           </div>
           <div>
@@ -222,6 +230,7 @@ const ConfigMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter Province'
             />
           </div>
           <div>
@@ -236,6 +245,21 @@ const ConfigMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter ZIP Code'
+            />
+          </div>
+          <div>
+            <label htmlFor="Salary" className="block text-sm font-medium text-gray-700">
+              Salary
+            </label>
+            <input
+              type="number"
+              id="Salary"
+              name="Salary"
+              value={formData.Salary !== null ? formData.Salary : ''}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              placeholder="Enter salary"
             />
           </div>
           <Button

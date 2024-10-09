@@ -1,4 +1,7 @@
+import { AccountProps } from "@/components/accountDataTable";
+import { StationProps } from "@/components/stationDataTable";
 import { Button } from "@/components/ui/button";
+import { UmbrellaProps } from "@/components/umbrellaDataTable";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,6 +14,7 @@ export interface RentalHistoryFormData {
   DestinationStationID: number | null;
   StartRentalTime: string;
   EndRentalTime: string | null;
+  Price: number,
 }
 
 const ConfigRentalHistoryForm = () => {
@@ -25,11 +29,12 @@ const ConfigRentalHistoryForm = () => {
     DestinationStationID: null,
     StartRentalTime: '',
     EndRentalTime: null,
+    Price: 0,
   });
 
-  const [accounts, setAccounts] = useState<any[]>([]);
-  const [stations, setStations] = useState<any[]>([]);
-  const [umbrellas, setUmbrellas] = useState<any[]>([]);
+  const [accounts, setAccounts] = useState<AccountProps[]>([]);
+  const [stations, setStations] = useState<StationProps[]>([]);
+  const [umbrellas, setUmbrellas] = useState<UmbrellaProps[]>([]);
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -41,7 +46,6 @@ const ConfigRentalHistoryForm = () => {
         if (!rentalResponse.ok) throw new Error('Failed to fetch rental history data');
         const rentalData: RentalHistoryFormData = await rentalResponse.json();
 
-        // Convert UTC times to local time
         const utcStartRentalTime = new Date(rentalData.StartRentalTime);
         const localStartRentalTime = new Date(utcStartRentalTime.getTime() - utcStartRentalTime.getTimezoneOffset() * 60000)
           .toISOString().slice(0, 16);
@@ -96,18 +100,12 @@ const ConfigRentalHistoryForm = () => {
     e.preventDefault();
 
     try {
-      const updatedData = {
-        ...formData,
-        StartRentalTime: new Date(formData.StartRentalTime).toISOString(),
-        EndRentalTime: formData.EndRentalTime ? new Date(formData.EndRentalTime).toISOString() : null,
-      };
-
       const response = await fetch(`http://localhost:3000/api/rental-histories/${rentalId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updatedData),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
@@ -252,6 +250,22 @@ const ConfigRentalHistoryForm = () => {
               value={formData.EndRentalTime ?? ''}
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+              Price
+            </label>
+            <input
+              type="number"
+              id="price"
+              name="Price"
+              value={formData.Price ?? 0}
+              onChange={handleChange}
+              required
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              placeholder="Enter Price"
             />
           </div>
 

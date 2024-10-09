@@ -29,7 +29,7 @@ const ConfigStationForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<StationFormData>({
     name: '',
-    capacity: 0,
+    capacity: null,
     latitude: 0,
     longitude: 0,
   });
@@ -179,6 +179,7 @@ const ConfigStationForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter Name'
             />
           </div>
           <div>
@@ -189,10 +190,11 @@ const ConfigStationForm = () => {
               type="number"
               id="capacity"
               name="capacity"
-              value={formData.capacity}
+              value={formData.capacity !== null ? formData.capacity : ''}
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              placeholder='Enter Capacity'
             />
           </div>
           <div>

@@ -157,6 +157,7 @@ const ConfigAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter First Name'
             />
           </div>
           <div>
@@ -171,6 +172,7 @@ const ConfigAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter Last Name'
             />
           </div>
           <div>
@@ -185,6 +187,7 @@ const ConfigAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter Email'
             />
           </div>
           <div>
@@ -212,6 +215,7 @@ const ConfigAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter Phone number'
             />
           </div>
           <div>
@@ -239,6 +243,7 @@ const ConfigAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter Street'
             />
           </div>
           <div>
@@ -253,6 +258,7 @@ const ConfigAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter City'
             />
           </div>
           <div>
@@ -267,6 +273,7 @@ const ConfigAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Province'
             />
           </div>
           <div>
@@ -281,6 +288,7 @@ const ConfigAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+              placeholder='Enter ZIP Code'
             />
           </div>
           <Button

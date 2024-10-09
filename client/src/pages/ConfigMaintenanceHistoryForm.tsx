@@ -125,23 +125,13 @@ const ConfigMaintenanceHistoryForm = () => {
     e.preventDefault();
     console.log('Form submitted with the following data:', formData);
 
-    const localDate = new Date(formData.MaintenanceTime);
-    const utcMaintenanceTime = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
-
-    const formattedMaintenanceTime = utcMaintenanceTime.toISOString().slice(0, 19).replace('T', ' ');
-
-    const updatedData = {
-      ...formData,
-      MaintenanceTime: formattedMaintenanceTime,
-    };
-
     try {
       const response = await fetch(`http://localhost:3000/api/maintenance-histories/${historyId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updatedData),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {

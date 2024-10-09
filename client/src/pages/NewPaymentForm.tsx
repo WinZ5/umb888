@@ -96,6 +96,7 @@ const NewPaymentForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter Card Number"
             />
           </div>
 
@@ -111,6 +112,7 @@ const NewPaymentForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter Card Name"
             />
           </div>
 
@@ -126,6 +128,7 @@ const NewPaymentForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter CVV"
             />
           </div>
 

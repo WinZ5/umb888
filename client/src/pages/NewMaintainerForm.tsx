@@ -54,7 +54,7 @@ const NewMaintainerForm = () => {
 
     const dataToSubmit = {
       ...formData,
-      Salary: parseFloat(formData.Salary as any) || null, // Parse Salary as float
+      Salary: parseFloat(formData.Salary as any) || null,
     };
 
     console.log('Form submitted with the following data:', dataToSubmit);
@@ -108,6 +108,7 @@ const NewMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter First Name"
             />
           </div>
 
@@ -123,6 +124,7 @@ const NewMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter Last Name"
             />
           </div>
 
@@ -138,6 +140,7 @@ const NewMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter Email"
             />
           </div>
 
@@ -167,6 +170,7 @@ const NewMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter Phone number"
             />
           </div>
 
@@ -182,6 +186,7 @@ const NewMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter Street"
             />
           </div>
 
@@ -197,6 +202,7 @@ const NewMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter City"
             />
           </div>
 
@@ -212,6 +218,7 @@ const NewMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter Province"
             />
           </div>
 
@@ -227,6 +234,7 @@ const NewMaintainerForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter ZIP Code"
             />
           </div>
 
@@ -240,7 +248,7 @@ const NewMaintainerForm = () => {
               name="Salary"
               value={formData.Salary !== null ? formData.Salary : ''}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               placeholder="Enter salary"
             />
           </div>

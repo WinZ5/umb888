@@ -11,6 +11,7 @@ export interface RentalHistoryFormData {
   UmbrellaID: number | null;
   StartRentalTime: string;
   EndRentalTime: string;
+  Price: number | null;
 }
 
 interface Station {
@@ -38,7 +39,9 @@ const NewRentalHistoryForm = () => {
     UmbrellaID: null,
     StartRentalTime: '',
     EndRentalTime: '',
+    Price: null,
   });
+
   const [stations, setStations] = useState<Station[]>([]);
   const [umbrellas, setUmbrellas] = useState<Umbrella[]>([]);
   const [accounts, setAccounts] = useState<Account[]>([]);
@@ -90,20 +93,12 @@ const NewRentalHistoryForm = () => {
       .catch(() => setLoading(false));
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    if (name === "StartRentalTime" || name === "EndRentalTime") {
-      setFormData(prevState => ({
-        ...prevState,
-        [name]: value || '',
-      }));
-    } else {
-      setFormData(prevState => ({
-        ...prevState,
-        [name]: value ? (isNaN(parseInt(value)) ? value : parseInt(value)) : null,
-      }));
-    }
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value === '' ? null : value,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -261,6 +256,21 @@ const NewRentalHistoryForm = () => {
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
               required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+              Price
+            </label>
+            <input
+              type="number"
+              id="price"
+              name="Price"
+              value={formData.Price !== null ? formData.Price : ''}
+              onChange={handleChange}
+              required
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
           </div>
 

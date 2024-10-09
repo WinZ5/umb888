@@ -41,7 +41,6 @@ app.get("/api/test", (req, res) => {
 });
 
 app.get("/api/stations", (req, res) => {
-
   const query = `
     SELECT 
       s.StationID,
@@ -267,6 +266,7 @@ app.get("/api/rental-histories", (req, res) => {
       rh.StartRentalTime,
       rh.EndRentalTime,
       rh.UmbrellaID,
+      rh.Price,
       a.AccountID,
       a.FirstName,
       a.LastName,
@@ -303,6 +303,7 @@ app.get("/api/rental-histories/:id", (req, res) => {
       rh.DestinationStationID,
       rh.StartRentalTime,
       rh.EndRentalTime,
+      rh.Price,
       a.FirstName AS AccountFirstName,
       a.LastName AS AccountLastName,
       s1.StationName AS StartStationName,
@@ -516,12 +517,13 @@ app.post("/api/rental-histories", (req, res) => {
     UmbrellaID,
     StartRentalTime,
     EndRentalTime,
+    Price,
   } = req.body;
 
   const query = `
     INSERT INTO RentalHistories 
-    (AccountID, DestinationStationID, StartStationID, CardID, UmbrellaID, StartRentalTime, EndRentalTime) 
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    (AccountID, DestinationStationID, StartStationID, CardID, UmbrellaID, StartRentalTime, EndRentalTime, Price) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
@@ -534,6 +536,7 @@ app.post("/api/rental-histories", (req, res) => {
       UmbrellaID,
       StartRentalTime,
       EndRentalTime,
+      Price,
     ],
     (err, result) => {
       if (err) {
@@ -552,6 +555,7 @@ app.post("/api/rental-histories", (req, res) => {
         UmbrellaID,
         StartRentalTime,
         EndRentalTime,
+        Price,
       });
     }
   );
@@ -658,7 +662,7 @@ app.put("/api/umbrellas/:id", (req, res) => {
 
 app.put("/api/maintainers/:maintainerId", (req, res) => {
   const { maintainerId } = req.params;
-  const { FirstName, LastName, Email, Phone, Street, City, Province, ZIPCode } =
+  const { FirstName, LastName, Email, Phone, Street, City, Province, ZIPCode, Salary } =
     req.body;
 
   const query = `
@@ -671,7 +675,8 @@ app.put("/api/maintainers/:maintainerId", (req, res) => {
       Street = ?, 
       City = ?, 
       Province = ?, 
-      ZIPCode = ? 
+      ZIPCode = ?,
+      Salary = ?
     WHERE MaintainerID = ?`;
 
   const values = [
@@ -683,6 +688,7 @@ app.put("/api/maintainers/:maintainerId", (req, res) => {
     City,
     Province,
     ZIPCode,
+    Salary,
     maintainerId,
   ];
 
@@ -703,12 +709,19 @@ app.put("/api/maintainers/:maintainerId", (req, res) => {
 app.put("/api/maintenance-histories/:historyid", (req, res) => {
   const { historyid } = req.params;
   const { MaintenanceTime, MaintainerID, StationID, Report } = req.body;
+
+  const formatToMySQLDateTime = (isoDate) => {
+    return isoDate.replace("T", " ").slice(0, 19);
+  };
+
+  const formattedMaintenanceTime = formatToMySQLDateTime(MaintenanceTime);
+
   const sql =
     "UPDATE MaintenanceHistories SET MaintenanceTime = ?, MaintainerID = ?, StationID = ?, Report = ? WHERE MaintenanceHistoryID = ?";
 
   db.query(
     sql,
-    [MaintenanceTime, MaintainerID, StationID, Report, historyid],
+    [formattedMaintenanceTime, MaintainerID, StationID, Report, historyid],
     (err, result) => {
       if (err) return res.status(500).send(err);
       if (result.affectedRows === 0)
@@ -727,10 +740,14 @@ app.put("/api/rental-histories/:rentalId", (req, res) => {
     DestinationStationID,
     StartRentalTime,
     EndRentalTime,
+    Price,
   } = req.body;
 
   const formatToMySQLDateTime = (isoDate) => {
-    return new Date(isoDate).toISOString().slice(0, 19).replace("T", " ");
+    const date = new Date(isoDate);
+    const offsetInMs = date.getTimezoneOffset() * 60000;
+    const localDate = new Date(date.getTime() - offsetInMs);
+    return localDate.toISOString().slice(0, 19).replace("T", " ");
   };
 
   const formattedStartRentalTime = formatToMySQLDateTime(StartRentalTime);
@@ -744,7 +761,8 @@ app.put("/api/rental-histories/:rentalId", (req, res) => {
       StartStationID = ?, 
       DestinationStationID = ?, 
       StartRentalTime = ?, 
-      EndRentalTime = ? 
+      EndRentalTime = ?,
+      Price = ?
     WHERE RentalHistoryID = ?`;
 
   db.query(
@@ -756,6 +774,7 @@ app.put("/api/rental-histories/:rentalId", (req, res) => {
       DestinationStationID,
       formattedStartRentalTime,
       formattedEndRentalTime,
+      Price,
       rentalId,
     ],
     (err, result) => {

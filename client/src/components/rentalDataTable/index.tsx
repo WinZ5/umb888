@@ -27,6 +27,7 @@ export interface RentalHistoryProps {
   UmbrellaID: number;
   StartRentalTime: Date;
   EndRentalTime: Date | null;
+  Price: number;
 }
 
 interface RentalHistoryDataTableProps {
@@ -42,6 +43,7 @@ interface ColumnVisibility {
   umbrellaId: boolean;
   startTime: boolean;
   endTime: boolean;
+  price: boolean;
 }
 
 const RentalHistoryDataTable: React.FC<RentalHistoryDataTableProps> = ({ data, onRentalHistoryDeleted }) => {
@@ -54,6 +56,7 @@ const RentalHistoryDataTable: React.FC<RentalHistoryDataTableProps> = ({ data, o
     umbrellaId: true,
     startTime: true,
     endTime: true,
+    price: true,
   });
   const [search, setSearch] = useState<string>('');
   const itemsPerPage: number = 12;
@@ -160,6 +163,7 @@ const RentalHistoryDataTable: React.FC<RentalHistoryDataTableProps> = ({ data, o
             {visibleColumns.umbrellaId && <TableHead>Umbrella ID</TableHead>}
             {visibleColumns.startTime && <TableHead>Start Time</TableHead>}
             {visibleColumns.endTime && <TableHead>End Time</TableHead>}
+            {visibleColumns.price && <TableHead>Price</TableHead>}
             <TableHead className="w-[50px]"></TableHead>
           </TableRow>
         </TableHeader>
@@ -175,6 +179,7 @@ const RentalHistoryDataTable: React.FC<RentalHistoryDataTableProps> = ({ data, o
               {visibleColumns.endTime && 
                 <TableCell>{rental.EndRentalTime ? new Date(rental.EndRentalTime).toLocaleString() : 'Active'}</TableCell>
               }
+              {visibleColumns.price && <TableCell>${rental.Price}</TableCell>}
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

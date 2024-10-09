@@ -108,6 +108,7 @@ const NewAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter First Name"
             />
           </div>
 
@@ -123,6 +124,7 @@ const NewAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter Last Name"
             />
           </div>
 
@@ -138,6 +140,7 @@ const NewAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter Email"
             />
           </div>
 
@@ -167,6 +170,7 @@ const NewAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter Phone Number"
             />
           </div>
 
@@ -182,6 +186,7 @@ const NewAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter Street"
             />
           </div>
 
@@ -197,6 +202,7 @@ const NewAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter City"
             />
           </div>
 
@@ -212,6 +218,7 @@ const NewAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter Province"
             />
           </div>
 
@@ -227,6 +234,7 @@ const NewAccountForm = () => {
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white"
+              placeholder="Enter ZIP Code"
             />
           </div>
 
